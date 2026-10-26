@@ -1,0 +1,112 @@
+// PantauDesa — DATA DEMO (fiktif, untuk lomba; bukan data resmi pemerintah)
+// Bentuk objek disamakan dengan respons API di docs/api-spec.md
+const DESA = [
+  { id: 1, nama: "Sukamaju", kecamatan: "Cibinong", kabupaten: "Bogor", skor: { dokumen: 82, update: 72, respons: 80, total: 78 } },
+  { id: 2, nama: "Mekarsari", kecamatan: "Cibinong", kabupaten: "Bogor", skor: { dokumen: 90, update: 85, respons: 82, total: 86 } },
+  { id: 3, nama: "Sinarjaya", kecamatan: "Citeureup", kabupaten: "Bogor", skor: { dokumen: 75, update: 68, respons: 70, total: 71 } },
+  { id: 4, nama: "Cibadak", kecamatan: "Citeureup", kabupaten: "Bogor", skor: { dokumen: 88, update: 80, respons: 82, total: 84 } },
+];
+const BULAN = ["Mei", "Jun", "Jul", "Agu", "Sep", "Okt"];
+const PROYEK = [
+  { id: 1, desaId: 1, nama: "Pengaspalan Jalan Raya Sukamaju", kategori: "jalan", pagu: 450000000, kontrak: 425000000, cair: 255000000, mulai: "2026-05-10", target: "2026-11-30", fisik: 42, rencana: 60, status: "terlambat", deskripsi: "Pengaspalan 1,2 km jalan utama desa, termasuk perbaikan bahu jalan dan marka.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-04-20", realisasi: "2026-04-18", status: "tepat_waktu" },
+      { tahap: "kontrak", judul: "Penandatanganan kontrak", rencana: "2026-05-05", realisasi: "2026-05-06", status: "tepat_waktu" },
+      { tahap: "pencairan", judul: "Pencairan tahap 1 (60%)", rencana: "2026-05-20", realisasi: "2026-05-22", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pengaspalan lapis 1", rencana: "2026-09-20", realisasi: null, status: "terlambat", catatan: "Tertunda karena curah hujan tinggi pada September." },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-11-30", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [5, 15, 30, 45, 60, 60], kurvaFisik: [5, 14, 26, 35, 40, 42],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [{ nama: "Warga RT 02", isi: "Aspal di tikungan dekat masjid sudah retak lagi.", milestone: "Pengaspalan lapis 1", status: "ditindaklanjuti", tanggapan: "Sudah dijadwalkan perbaikan pada lapis 2." }] },
+  { id: 2, desaId: 1, nama: "Pembangunan Drainase RT 02/03", kategori: "drainase", pagu: 280000000, kontrak: 265000000, cair: 265000000, mulai: "2026-06-01", target: "2026-10-31", fisik: 78, rencana: 75, status: "pelaksanaan", deskripsi: "Drainase beton 800 meter untuk mengurangi genangan di musim hujan.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-05-15", realisasi: "2026-05-14", status: "tepat_waktu" },
+      { tahap: "kontrak", judul: "Penandatanganan kontrak", rencana: "2026-05-28", realisasi: "2026-05-28", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pemasangan drainase tahap 2", rencana: "2026-10-15", realisasi: "2026-10-12", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-10-31", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [0, 10, 30, 50, 65, 75], kurvaFisik: [0, 12, 32, 52, 68, 78],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [] },
+  { id: 3, desaId: 1, nama: "Renovasi Balai Warga Sukamaju", kategori: "fasilitas_umum", pagu: 320000000, kontrak: 300000000, cair: 150000000, mulai: "2026-07-01", target: "2026-12-20", fisik: 35, rencana: 40, status: "pelaksanaan", deskripsi: "Perbaikan atap, lantai aula, dan toilet balai warga.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-06-10", realisasi: "2026-06-09", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pekerjaan atap selesai", rencana: "2026-09-30", realisasi: "2026-10-02", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-12-20", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [0, 0, 10, 25, 35, 40], kurvaFisik: [0, 0, 8, 22, 32, 35],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: false }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [{ nama: "Warga RT 05", isi: "Material bangunan menutup akses jalan kecil di samping balai.", milestone: "Pekerjaan atap selesai", status: "selesai", tanggapan: "Material sudah dipindahkan ke halaman belakang." }] },
+  { id: 4, desaId: 2, nama: "Pengerasan Jalan Usaha Tani Mekarsari", kategori: "jalan", pagu: 380000000, kontrak: 360000000, cair: 360000000, mulai: "2026-04-01", target: "2026-09-30", fisik: 100, rencana: 100, status: "selesai", deskripsi: "Pengerasan jalan usaha tani 900 meter menuju lahan pertanian.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-03-10", realisasi: "2026-03-08", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pengerasan selesai", rencana: "2026-09-15", realisasi: "2026-09-10", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-09-30", realisasi: "2026-09-28", status: "tepat_waktu" }],
+    kurvaRencana: [10, 30, 55, 75, 90, 100], kurvaFisik: [12, 32, 58, 78, 92, 100],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: true }],
+    laporan: [] },
+  { id: 5, desaId: 2, nama: "Sumur Bor dan Jaringan Air Bersih Mekarsari", kategori: "air_bersih", pagu: 520000000, kontrak: 495000000, cair: 300000000, mulai: "2026-05-15", target: "2026-12-15", fisik: 55, rencana: 55, status: "pelaksanaan", deskripsi: "Satu sumur bor dan jaringan pipa ke 120 rumah.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-04-25", realisasi: "2026-04-24", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pengeboran selesai", rencana: "2026-08-31", realisasi: "2026-08-29", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-12-15", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [5, 15, 30, 45, 52, 55], kurvaFisik: [5, 16, 30, 44, 52, 55],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [] },
+  { id: 6, desaId: 2, nama: "Normalisasi Saluran Irigasi Mekarsari", kategori: "irigasi", pagu: 410000000, kontrak: 390000000, cair: 120000000, mulai: "2026-06-01", target: "2026-11-15", fisik: 28, rencana: 45, status: "terlambat", deskripsi: "Pembersihan dan perbaikan tanggul saluran irigasi 1,5 km.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-05-10", realisasi: "2026-05-09", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Normalisasi segmen 1", rencana: "2026-09-10", realisasi: null, status: "terlambat", catatan: "Alat berat datang terlambat dua minggu." },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-11-15", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [0, 10, 25, 38, 45, 45], kurvaFisik: [0, 8, 18, 24, 27, 28],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [{ nama: "Petani Dusun Tengah", isi: "Air belum sampai ke petak sawah bagian hilir.", milestone: "Normalisasi segmen 1", status: "diterima", tanggapan: "" }] },
+  { id: 7, desaId: 3, nama: "Pengaspalan Jalan Lingkungan RW 04 Sinarjaya", kategori: "jalan", pagu: 260000000, kontrak: null, cair: 0, mulai: null, target: "2027-02-28", fisik: 0, rencana: 10, status: "tender", deskripsi: "Pengaspalan jalan lingkungan 600 meter. Saat ini masih tahap tender.",
+    milestones: [
+      { tahap: "tender", judul: "Pengumuman tender", rencana: "2026-10-31", realisasi: null, status: "akan_datang" },
+      { tahap: "kontrak", judul: "Penandatanganan kontrak", rencana: "2026-11-30", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [0, 0, 0, 0, 0, 10], kurvaFisik: [0, 0, 0, 0, 0, 0],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: false }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [] },
+  { id: 8, desaId: 3, nama: "Pembangunan MCK Umum Pasar Desa Sinarjaya", kategori: "fasilitas_umum", pagu: 190000000, kontrak: 175000000, cair: 175000000, mulai: "2026-05-01", target: "2026-10-31", fisik: 92, rencana: 90, status: "pelaksanaan", deskripsi: "MCK umum 6 bilik di area pasar desa.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-04-05", realisasi: "2026-04-04", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Struktur dan atap selesai", rencana: "2026-09-20", realisasi: "2026-09-18", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-10-31", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [10, 30, 50, 70, 85, 90], kurvaFisik: [12, 32, 52, 72, 86, 92],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [] },
+  { id: 9, desaId: 3, nama: "Drainase Jalan Poros Desa Sinarjaya", kategori: "drainase", pagu: 300000000, kontrak: 285000000, cair: 170000000, mulai: "2026-07-01", target: "2026-12-31", fisik: 48, rencana: 50, status: "pelaksanaan", deskripsi: "Drainase 1 km di sepanjang jalan poros desa.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-06-05", realisasi: "2026-06-04", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Drainase segmen barat selesai", rencana: "2026-10-20", realisasi: "2026-10-19", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-12-31", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [0, 0, 10, 30, 42, 50], kurvaFisik: [0, 0, 9, 28, 40, 48],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: false }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [] },
+  { id: 10, desaId: 4, nama: "Jembatan Penghubung Dusun Kidul Cibadak", kategori: "jalan", pagu: 850000000, kontrak: 810000000, cair: 400000000, mulai: "2026-04-15", target: "2027-01-31", fisik: 50, rencana: 62, status: "terlambat", deskripsi: "Jembatan beton 18 meter menggantikan jembatan kayu.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-03-20", realisasi: "2026-03-18", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pondasi dan abutmen selesai", rencana: "2026-09-30", realisasi: null, status: "terlambat", catatan: "Pengiriman material baja tertunda." },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2027-01-31", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [5, 15, 30, 45, 58, 62], kurvaFisik: [5, 14, 26, 36, 45, 50],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [{ nama: "Warga Dusun Kidul", isi: "Akses sementara lewat jembatan darurat licin saat hujan.", milestone: "Pondasi dan abutmen selesai", status: "ditindaklanjuti", tanggapan: "Papan kayu anti-selip sudah dipasang." }] },
+  { id: 11, desaId: 4, nama: "Jaringan Air Bersih Dusun Wetan Cibadak", kategori: "air_bersih", pagu: 460000000, kontrak: 440000000, cair: 440000000, mulai: "2026-03-01", target: "2026-08-31", fisik: 100, rencana: 100, status: "selesai", deskripsi: "Jaringan pipa ke 95 rumah di Dusun Wetan.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-02-05", realisasi: "2026-02-03", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pemasangan pipa selesai", rencana: "2026-08-15", realisasi: "2026-08-12", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-08-31", realisasi: "2026-08-30", status: "tepat_waktu" }],
+    kurvaRencana: [10, 30, 50, 70, 90, 100], kurvaFisik: [12, 32, 54, 74, 92, 100],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: true }],
+    laporan: [] },
+  { id: 12, desaId: 4, nama: "Rehabilitasi Jalan Setapak dan Drainase Cibadak", kategori: "drainase", pagu: 230000000, kontrak: 215000000, cair: 65000000, mulai: "2026-09-01", target: "2027-01-15", fisik: 15, rencana: 15, status: "kontrak", deskripsi: "Rehabilitasi jalan setapak 400 meter dan drainase kecil di permukiman padat.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-08-10", realisasi: "2026-08-08", status: "tepat_waktu" },
+      { tahap: "kontrak", judul: "Penandatanganan kontrak", rencana: "2026-08-28", realisasi: "2026-08-27", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pekerjaan dimulai", rencana: "2026-09-01", realisasi: "2026-09-02", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2027-01-15", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [0, 0, 0, 0, 5, 15], kurvaFisik: [0, 0, 0, 0, 5, 15],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [] },
+];
+
+export { DESA, PROYEK, BULAN };

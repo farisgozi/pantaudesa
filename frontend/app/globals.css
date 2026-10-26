@@ -1,0 +1,63 @@
+* { box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; margin: 0; color: #172033; background: #f4f6f8; line-height: 1.5; }
+header { background: #0e4a3a; color: #fff; padding: 28px 20px; }
+header h1 { margin: 0 0 6px; font-size: 30px; }
+header p { margin: 0; opacity: .9; max-width: 760px; }
+.demo { background: #fff3cd; border-bottom: 1px solid #e6c87a; padding: 10px 20px; font-size: 14px; }
+main { max-width: 980px; margin: 0 auto; padding: 20px; }
+.summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.stat { background: #fff; border: 1px solid #dde3ea; border-radius: 12px; padding: 16px; }
+.stat strong { display: block; font-size: 20px; }
+.stat span { color: #5b6776; font-size: 13px; }
+.stat.alert { border-color: #e8a0a0; background: #fff5f5; }
+h2 { margin-top: 28px; }
+.desa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.desa-card { background: #fff; border: 1px solid #dde3ea; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; }
+.score { font-size: 28px; font-weight: 700; color: #0e4a3a; }
+.score small { font-size: 14px; color: #5b6776; }
+.muted { color: #5b6776; }
+.small { font-size: 13px; }
+.filters { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; margin: 16px 0; }
+input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font: inherit; }
+.card { background: #fff; border: 1px solid #dde3ea; border-radius: 12px; padding: 16px; margin-bottom: 12px; cursor: pointer; }
+.card:hover { border-color: #0e4a3a; }
+.card h3 { margin: 8px 0; }
+.card-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.badge { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: #e6eef5; }
+.badge.late, .badge.terlambat { background: #fde2e2; color: #9b1c1c; }
+.badge.selesai { background: #dcf5e6; color: #14532d; }
+.badge.tender, .badge.kontrak { background: #fef3c7; color: #92400e; }
+.bar { height: 10px; background: #e6eaf0; border-radius: 999px; overflow: hidden; margin: 10px 0 6px; }
+.bar > div { height: 100%; background: #0e7a5f; }
+.bar.big { height: 14px; }
+.row { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.neg { color: #b91c1c; } .pos { color: #047857; }
+.btn { background: #0e4a3a; color: #fff; border: 0; border-radius: 8px; padding: 10px 16px; font-weight: 600; cursor: pointer; }
+.link { background: none; border: 0; color: #0e4a3a; font-weight: 600; cursor: pointer; padding: 0; margin-bottom: 12px; }
+.money { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.money > div { background: #fff; border: 1px solid #dde3ea; border-radius: 10px; padding: 12px; }
+.money span { display: block; color: #5b6776; font-size: 13px; }
+.timeline { list-style: none; padding-left: 0; }
+.timeline li { border-left: 4px solid #cbd5e0; padding: 6px 0 14px 14px; margin-left: 4px; }
+.timeline li.tepat_waktu, .timeline li.selesai { border-color: #0e7a5f; }
+.timeline li.terlambat { border-color: #dc2626; }
+.curve { width: 100%; max-width: 640px; background: #fff; border: 1px solid #dde3ea; border-radius: 12px; }
+.curve text { font-size: 11px; fill: #5b6776; }
+.line-rencana { fill: none; stroke: #94a3b8; stroke-width: 2; stroke-dasharray: 6 4; }
+.line-fisik { fill: none; stroke: #0e7a5f; stroke-width: 3; }
+.dot-rencana { fill: #94a3b8; } .dot-fisik { fill: #0e7a5f; }
+.legend { display: flex; gap: 16px; font-size: 13px; margin-top: 6px; }
+.legend .dashed { color: #64748b; } .legend .solid { color: #0e7a5f; font-weight: 600; }
+.photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.photo { background: linear-gradient(135deg, #dbeafe, #dcfce7); border: 1px dashed #94a3b8; border-radius: 10px; min-height: 90px; display: grid; place-items: center; text-align: center; padding: 10px; font-size: 13px; }
+.laporan { background: #fff; border: 1px solid #dde3ea; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.form { background: #fff; border: 1px solid #dde3ea; border-radius: 12px; padding: 16px; display: grid; gap: 12px; margin-top: 12px; }
+.form label { font-weight: 600; font-size: 14px; display: grid; gap: 6px; }
+.form input, .form select, .form textarea { font-weight: 400; }
+@media (max-width: 700px) {
+  .summary, .money, .photos { grid-template-columns: 1fr 1fr; }
+  .desa-grid, .filters { grid-template-columns: 1fr; }
+  header h1 { font-size: 26px; }
+}
+
+.card-link { display: block; text-decoration: none; color: inherit; }

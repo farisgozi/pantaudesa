@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PantauDesa — Lacak Proyek & Anggaran Desa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>PantauDesa</h1>
+  <p>Cari nama proyek, lihat anggarannya sudah cair berapa, progres fisiknya tertinggal atau tidak, dan bukti milestone-nya — dalam satu halaman.</p>
+</header>
+<div class="demo">⚠️ Data demo untuk lomba — nama desa, proyek, dan angka di halaman ini fiktif dan realistis, bukan data resmi pemerintah.</div>
+<main>
+  <section id="listView">
+    <div id="summary" class="summary"></div>
+    <h2>Skor keterbukaan desa</h2>
+    <p class="muted small">Skor = kelengkapan dokumen 40% + ketepatan update 30% + respons laporan 30%. Lihat PRD untuk rumusnya.</p>
+    <div id="desaScores" class="desa-grid"></div>
+    <h2>Cari proyek</h2>
+    <div class="filters">
+      <input id="q" type="search" placeholder="Cari nama proyek, misal: Pengaspalan Jalan X">
+      <select id="fDesa"></select>
+      <select id="fStatus">
+        <option value="">Semua status</option>
+        <option value="terlambat">Terlambat</option>
+        <option value="tender">Tender</option>
+        <option value="kontrak">Kontrak</option>
+        <option value="pelaksanaan">Pelaksanaan</option>
+        <option value="selesai">Selesai</option>
+      </select>
+      <select id="fKategori">
+        <option value="">Semua kategori</option>
+        <option value="jalan">Jalan</option>
+        <option value="drainase">Drainase</option>
+        <option value="air_bersih">Air bersih</option>
+        <option value="fasilitas_umum">Fasilitas umum</option>
+        <option value="irigasi">Irigasi</option>
+      </select>
+    </div>
+    <p id="count" class="muted small"></p>
+    <div id="list"></div>
+    <p class="muted small">Tips demo: filter Status = Terlambat, lalu klik proyek Pengaspalan Jalan Raya Sukamaju untuk melihat milestone yang lewat deadline dan kurva rencana vs fisik yang bercabang.</p>
+  </section>
+  <section id="detailView" hidden>
+    <div id="detail"></div>
+  </section>
+</main>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

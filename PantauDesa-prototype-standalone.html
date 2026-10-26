@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PantauDesa — Lacak Proyek & Anggaran Desa</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; margin: 0; color: #172033; background: #f4f6f8; line-height: 1.5; }
+header { background: #0e4a3a; color: #fff; padding: 28px 20px; }
+header h1 { margin: 0 0 6px; font-size: 30px; }
+header p { margin: 0; opacity: .9; max-width: 760px; }
+.demo { background: #fff3cd; border-bottom: 1px solid #e6c87a; padding: 10px 20px; font-size: 14px; }
+main { max-width: 980px; margin: 0 auto; padding: 20px; }
+.summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.stat { background: #fff; border: 1px solid #dde3ea; border-radius: 12px; padding: 16px; }
+.stat strong { display: block; font-size: 20px; }
+.stat span { color: #5b6776; font-size: 13px; }
+.stat.alert { border-color: #e8a0a0; background: #fff5f5; }
+h2 { margin-top: 28px; }
+.desa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.desa-card { background: #fff; border: 1px solid #dde3ea; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; }
+.score { font-size: 28px; font-weight: 700; color: #0e4a3a; }
+.score small { font-size: 14px; color: #5b6776; }
+.muted { color: #5b6776; }
+.small { font-size: 13px; }
+.filters { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; margin: 16px 0; }
+input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font: inherit; }
+.card { background: #fff; border: 1px solid #dde3ea; border-radius: 12px; padding: 16px; margin-bottom: 12px; cursor: pointer; }
+.card:hover { border-color: #0e4a3a; }
+.card h3 { margin: 8px 0; }
+.card-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.badge { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: #e6eef5; }
+.badge.late, .badge.terlambat { background: #fde2e2; color: #9b1c1c; }
+.badge.selesai { background: #dcf5e6; color: #14532d; }
+.badge.tender, .badge.kontrak { background: #fef3c7; color: #92400e; }
+.bar { height: 10px; background: #e6eaf0; border-radius: 999px; overflow: hidden; margin: 10px 0 6px; }
+.bar > div { height: 100%; background: #0e7a5f; }
+.bar.big { height: 14px; }
+.row { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.neg { color: #b91c1c; } .pos { color: #047857; }
+.btn { background: #0e4a3a; color: #fff; border: 0; border-radius: 8px; padding: 10px 16px; font-weight: 600; cursor: pointer; }
+.link { background: none; border: 0; color: #0e4a3a; font-weight: 600; cursor: pointer; padding: 0; margin-bottom: 12px; }
+.money { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.money > div { background: #fff; border: 1px solid #dde3ea; border-radius: 10px; padding: 12px; }
+.money span { display: block; color: #5b6776; font-size: 13px; }
+.timeline { list-style: none; padding-left: 0; }
+.timeline li { border-left: 4px solid #cbd5e0; padding: 6px 0 14px 14px; margin-left: 4px; }
+.timeline li.tepat_waktu, .timeline li.selesai { border-color: #0e7a5f; }
+.timeline li.terlambat { border-color: #dc2626; }
+.curve { width: 100%; max-width: 640px; background: #fff; border: 1px solid #dde3ea; border-radius: 12px; }
+.curve text { font-size: 11px; fill: #5b6776; }
+.line-rencana { fill: none; stroke: #94a3b8; stroke-width: 2; stroke-dasharray: 6 4; }
+.line-fisik { fill: none; stroke: #0e7a5f; stroke-width: 3; }
+.dot-rencana { fill: #94a3b8; } .dot-fisik { fill: #0e7a5f; }
+.legend { display: flex; gap: 16px; font-size: 13px; margin-top: 6px; }
+.legend .dashed { color: #64748b; } .legend .solid { color: #0e7a5f; font-weight: 600; }
+.photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.photo { background: linear-gradient(135deg, #dbeafe, #dcfce7); border: 1px dashed #94a3b8; border-radius: 10px; min-height: 90px; display: grid; place-items: center; text-align: center; padding: 10px; font-size: 13px; }
+.laporan { background: #fff; border: 1px solid #dde3ea; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.form { background: #fff; border: 1px solid #dde3ea; border-radius: 12px; padding: 16px; display: grid; gap: 12px; margin-top: 12px; }
+.form label { font-weight: 600; font-size: 14px; display: grid; gap: 6px; }
+.form input, .form select, .form textarea { font-weight: 400; }
+@media (max-width: 700px) {
+  .summary, .money, .photos { grid-template-columns: 1fr 1fr; }
+  .desa-grid, .filters { grid-template-columns: 1fr; }
+  header h1 { font-size: 26px; }
+}
+
+</style>
+</head>
+<body>
+<header>
+  <h1>PantauDesa</h1>
+  <p>Cari nama proyek, lihat anggarannya sudah cair berapa, progres fisiknya tertinggal atau tidak, dan bukti milestone-nya — dalam satu halaman.</p>
+</header>
+<div class="demo">⚠️ Data demo untuk lomba — nama desa, proyek, dan angka di halaman ini fiktif dan realistis, bukan data resmi pemerintah.</div>
+<main>
+  <section id="listView">
+    <div id="summary" class="summary"></div>
+    <h2>Skor keterbukaan desa</h2>
+    <p class="muted small">Skor = kelengkapan dokumen 40% + ketepatan update 30% + respons laporan 30%. Lihat PRD untuk rumusnya.</p>
+    <div id="desaScores" class="desa-grid"></div>
+    <h2>Cari proyek</h2>
+    <div class="filters">
+      <input id="q" type="search" placeholder="Cari nama proyek, misal: Pengaspalan Jalan X">
+      <select id="fDesa"></select>
+      <select id="fStatus">
+        <option value="">Semua status</option>
+        <option value="terlambat">Terlambat</option>
+        <option value="tender">Tender</option>
+        <option value="kontrak">Kontrak</option>
+        <option value="pelaksanaan">Pelaksanaan</option>
+        <option value="selesai">Selesai</option>
+      </select>
+      <select id="fKategori">
+        <option value="">Semua kategori</option>
+        <option value="jalan">Jalan</option>
+        <option value="drainase">Drainase</option>
+        <option value="air_bersih">Air bersih</option>
+        <option value="fasilitas_umum">Fasilitas umum</option>
+        <option value="irigasi">Irigasi</option>
+      </select>
+    </div>
+    <p id="count" class="muted small"></p>
+    <div id="list"></div>
+    <p class="muted small">Tips demo: filter Status = Terlambat, lalu klik proyek Pengaspalan Jalan Raya Sukamaju untuk melihat milestone yang lewat deadline dan kurva rencana vs fisik yang bercabang.</p>
+  </section>
+  <section id="detailView" hidden>
+    <div id="detail"></div>
+  </section>
+</main>
+<script>
+// PantauDesa — DATA DEMO (fiktif, untuk lomba; bukan data resmi pemerintah)
+// Bentuk objek disamakan dengan respons API di docs/api-spec.md
+const DESA = [
+  { id: 1, nama: "Sukamaju", kecamatan: "Cibinong", kabupaten: "Bogor", skor: { dokumen: 82, update: 72, respons: 80, total: 78 } },
+  { id: 2, nama: "Mekarsari", kecamatan: "Cibinong", kabupaten: "Bogor", skor: { dokumen: 90, update: 85, respons: 82, total: 86 } },
+  { id: 3, nama: "Sinarjaya", kecamatan: "Citeureup", kabupaten: "Bogor", skor: { dokumen: 75, update: 68, respons: 70, total: 71 } },
+  { id: 4, nama: "Cibadak", kecamatan: "Citeureup", kabupaten: "Bogor", skor: { dokumen: 88, update: 80, respons: 82, total: 84 } },
+];
+const BULAN = ["Mei", "Jun", "Jul", "Agu", "Sep", "Okt"];
+const PROYEK = [
+  { id: 1, desaId: 1, nama: "Pengaspalan Jalan Raya Sukamaju", kategori: "jalan", pagu: 450000000, kontrak: 425000000, cair: 255000000, mulai: "2026-05-10", target: "2026-11-30", fisik: 42, rencana: 60, status: "terlambat", deskripsi: "Pengaspalan 1,2 km jalan utama desa, termasuk perbaikan bahu jalan dan marka.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-04-20", realisasi: "2026-04-18", status: "tepat_waktu" },
+      { tahap: "kontrak", judul: "Penandatanganan kontrak", rencana: "2026-05-05", realisasi: "2026-05-06", status: "tepat_waktu" },
+      { tahap: "pencairan", judul: "Pencairan tahap 1 (60%)", rencana: "2026-05-20", realisasi: "2026-05-22", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pengaspalan lapis 1", rencana: "2026-09-20", realisasi: null, status: "terlambat", catatan: "Tertunda karena curah hujan tinggi pada September." },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-11-30", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [5, 15, 30, 45, 60, 60], kurvaFisik: [5, 14, 26, 35, 40, 42],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [{ nama: "Warga RT 02", isi: "Aspal di tikungan dekat masjid sudah retak lagi.", milestone: "Pengaspalan lapis 1", status: "ditindaklanjuti", tanggapan: "Sudah dijadwalkan perbaikan pada lapis 2." }] },
+  { id: 2, desaId: 1, nama: "Pembangunan Drainase RT 02/03", kategori: "drainase", pagu: 280000000, kontrak: 265000000, cair: 265000000, mulai: "2026-06-01", target: "2026-10-31", fisik: 78, rencana: 75, status: "pelaksanaan", deskripsi: "Drainase beton 800 meter untuk mengurangi genangan di musim hujan.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-05-15", realisasi: "2026-05-14", status: "tepat_waktu" },
+      { tahap: "kontrak", judul: "Penandatanganan kontrak", rencana: "2026-05-28", realisasi: "2026-05-28", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pemasangan drainase tahap 2", rencana: "2026-10-15", realisasi: "2026-10-12", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-10-31", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [0, 10, 30, 50, 65, 75], kurvaFisik: [0, 12, 32, 52, 68, 78],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [] },
+  { id: 3, desaId: 1, nama: "Renovasi Balai Warga Sukamaju", kategori: "fasilitas_umum", pagu: 320000000, kontrak: 300000000, cair: 150000000, mulai: "2026-07-01", target: "2026-12-20", fisik: 35, rencana: 40, status: "pelaksanaan", deskripsi: "Perbaikan atap, lantai aula, dan toilet balai warga.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-06-10", realisasi: "2026-06-09", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pekerjaan atap selesai", rencana: "2026-09-30", realisasi: "2026-10-02", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-12-20", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [0, 0, 10, 25, 35, 40], kurvaFisik: [0, 0, 8, 22, 32, 35],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: false }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [{ nama: "Warga RT 05", isi: "Material bangunan menutup akses jalan kecil di samping balai.", milestone: "Pekerjaan atap selesai", status: "selesai", tanggapan: "Material sudah dipindahkan ke halaman belakang." }] },
+  { id: 4, desaId: 2, nama: "Pengerasan Jalan Usaha Tani Mekarsari", kategori: "jalan", pagu: 380000000, kontrak: 360000000, cair: 360000000, mulai: "2026-04-01", target: "2026-09-30", fisik: 100, rencana: 100, status: "selesai", deskripsi: "Pengerasan jalan usaha tani 900 meter menuju lahan pertanian.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-03-10", realisasi: "2026-03-08", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pengerasan selesai", rencana: "2026-09-15", realisasi: "2026-09-10", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-09-30", realisasi: "2026-09-28", status: "tepat_waktu" }],
+    kurvaRencana: [10, 30, 55, 75, 90, 100], kurvaFisik: [12, 32, 58, 78, 92, 100],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: true }],
+    laporan: [] },
+  { id: 5, desaId: 2, nama: "Sumur Bor dan Jaringan Air Bersih Mekarsari", kategori: "air_bersih", pagu: 520000000, kontrak: 495000000, cair: 300000000, mulai: "2026-05-15", target: "2026-12-15", fisik: 55, rencana: 55, status: "pelaksanaan", deskripsi: "Satu sumur bor dan jaringan pipa ke 120 rumah.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-04-25", realisasi: "2026-04-24", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pengeboran selesai", rencana: "2026-08-31", realisasi: "2026-08-29", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-12-15", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [5, 15, 30, 45, 52, 55], kurvaFisik: [5, 16, 30, 44, 52, 55],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [] },
+  { id: 6, desaId: 2, nama: "Normalisasi Saluran Irigasi Mekarsari", kategori: "irigasi", pagu: 410000000, kontrak: 390000000, cair: 120000000, mulai: "2026-06-01", target: "2026-11-15", fisik: 28, rencana: 45, status: "terlambat", deskripsi: "Pembersihan dan perbaikan tanggul saluran irigasi 1,5 km.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-05-10", realisasi: "2026-05-09", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Normalisasi segmen 1", rencana: "2026-09-10", realisasi: null, status: "terlambat", catatan: "Alat berat datang terlambat dua minggu." },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-11-15", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [0, 10, 25, 38, 45, 45], kurvaFisik: [0, 8, 18, 24, 27, 28],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [{ nama: "Petani Dusun Tengah", isi: "Air belum sampai ke petak sawah bagian hilir.", milestone: "Normalisasi segmen 1", status: "diterima", tanggapan: "" }] },
+  { id: 7, desaId: 3, nama: "Pengaspalan Jalan Lingkungan RW 04 Sinarjaya", kategori: "jalan", pagu: 260000000, kontrak: null, cair: 0, mulai: null, target: "2027-02-28", fisik: 0, rencana: 10, status: "tender", deskripsi: "Pengaspalan jalan lingkungan 600 meter. Saat ini masih tahap tender.",
+    milestones: [
+      { tahap: "tender", judul: "Pengumuman tender", rencana: "2026-10-31", realisasi: null, status: "akan_datang" },
+      { tahap: "kontrak", judul: "Penandatanganan kontrak", rencana: "2026-11-30", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [0, 0, 0, 0, 0, 10], kurvaFisik: [0, 0, 0, 0, 0, 0],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: false }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [] },
+  { id: 8, desaId: 3, nama: "Pembangunan MCK Umum Pasar Desa Sinarjaya", kategori: "fasilitas_umum", pagu: 190000000, kontrak: 175000000, cair: 175000000, mulai: "2026-05-01", target: "2026-10-31", fisik: 92, rencana: 90, status: "pelaksanaan", deskripsi: "MCK umum 6 bilik di area pasar desa.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-04-05", realisasi: "2026-04-04", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Struktur dan atap selesai", rencana: "2026-09-20", realisasi: "2026-09-18", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-10-31", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [10, 30, 50, 70, 85, 90], kurvaFisik: [12, 32, 52, 72, 86, 92],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [] },
+  { id: 9, desaId: 3, nama: "Drainase Jalan Poros Desa Sinarjaya", kategori: "drainase", pagu: 300000000, kontrak: 285000000, cair: 170000000, mulai: "2026-07-01", target: "2026-12-31", fisik: 48, rencana: 50, status: "pelaksanaan", deskripsi: "Drainase 1 km di sepanjang jalan poros desa.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-06-05", realisasi: "2026-06-04", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Drainase segmen barat selesai", rencana: "2026-10-20", realisasi: "2026-10-19", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-12-31", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [0, 0, 10, 30, 42, 50], kurvaFisik: [0, 0, 9, 28, 40, 48],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: false }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [] },
+  { id: 10, desaId: 4, nama: "Jembatan Penghubung Dusun Kidul Cibadak", kategori: "jalan", pagu: 850000000, kontrak: 810000000, cair: 400000000, mulai: "2026-04-15", target: "2027-01-31", fisik: 50, rencana: 62, status: "terlambat", deskripsi: "Jembatan beton 18 meter menggantikan jembatan kayu.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-03-20", realisasi: "2026-03-18", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pondasi dan abutmen selesai", rencana: "2026-09-30", realisasi: null, status: "terlambat", catatan: "Pengiriman material baja tertunda." },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2027-01-31", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [5, 15, 30, 45, 58, 62], kurvaFisik: [5, 14, 26, 36, 45, 50],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [{ nama: "Warga Dusun Kidul", isi: "Akses sementara lewat jembatan darurat licin saat hujan.", milestone: "Pondasi dan abutmen selesai", status: "ditindaklanjuti", tanggapan: "Papan kayu anti-selip sudah dipasang." }] },
+  { id: 11, desaId: 4, nama: "Jaringan Air Bersih Dusun Wetan Cibadak", kategori: "air_bersih", pagu: 460000000, kontrak: 440000000, cair: 440000000, mulai: "2026-03-01", target: "2026-08-31", fisik: 100, rencana: 100, status: "selesai", deskripsi: "Jaringan pipa ke 95 rumah di Dusun Wetan.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-02-05", realisasi: "2026-02-03", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pemasangan pipa selesai", rencana: "2026-08-15", realisasi: "2026-08-12", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2026-08-31", realisasi: "2026-08-30", status: "tepat_waktu" }],
+    kurvaRencana: [10, 30, 50, 70, 90, 100], kurvaFisik: [12, 32, 54, 74, 92, 100],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: true }],
+    laporan: [] },
+  { id: 12, desaId: 4, nama: "Rehabilitasi Jalan Setapak dan Drainase Cibadak", kategori: "drainase", pagu: 230000000, kontrak: 215000000, cair: 65000000, mulai: "2026-09-01", target: "2027-01-15", fisik: 15, rencana: 15, status: "kontrak", deskripsi: "Rehabilitasi jalan setapak 400 meter dan drainase kecil di permukiman padat.",
+    milestones: [
+      { tahap: "tender", judul: "Tender selesai", rencana: "2026-08-10", realisasi: "2026-08-08", status: "tepat_waktu" },
+      { tahap: "kontrak", judul: "Penandatanganan kontrak", rencana: "2026-08-28", realisasi: "2026-08-27", status: "tepat_waktu" },
+      { tahap: "pelaksanaan", judul: "Pekerjaan dimulai", rencana: "2026-09-01", realisasi: "2026-09-02", status: "tepat_waktu" },
+      { tahap: "serah_terima", judul: "Serah terima pekerjaan", rencana: "2027-01-15", realisasi: null, status: "akan_datang" }],
+    kurvaRencana: [0, 0, 0, 0, 5, 15], kurvaFisik: [0, 0, 0, 0, 5, 15],
+    dokumen: [{ jenis: "RAB ringkas", tersedia: true }, { jenis: "SPK / kontrak", tersedia: true }, { jenis: "BA serah terima", tersedia: false }],
+    laporan: [] },
+];
+
+</script>
+<script>
+// PantauDesa — prototipe tanpa build-step. Data dari data.js (data demo).
+const $ = (s) => document.querySelector(s);
+const rp = (n) => n == null ? "—" : "Rp " + n.toLocaleString("id-ID");
+const desaById = (id) => DESA.find((d) => d.id === id);
+const deviasi = (p) => p.fisik - p.rencana;
+const isTerlambat = (p) => p.status === "terlambat" || (p.rencana - p.fisik) > 10 || p.milestones.some((m) => m.status === "terlambat");
+const labelStatus = { tender: "Tender", kontrak: "Kontrak", pelaksanaan: "Pelaksanaan", selesai: "Selesai", terlambat: "Terlambat" };
+const labelMilestone = { akan_datang: "Akan datang", selesai: "Selesai", terlambat: "Terlambat", tepat_waktu: "Tepat waktu" };
+const labelKategori = { jalan: "Jalan", drainase: "Drainase", air_bersih: "Air bersih", fasilitas_umum: "Fasilitas umum", irigasi: "Irigasi" };
+
+let followed = new Set(JSON.parse(localStorage.getItem("pantaudesa_follow") || "[]"));
+let currentId = null;
+
+function saveFollow() { localStorage.setItem("pantaudesa_follow", JSON.stringify([...followed])); }
+
+function renderSummary() {
+  const totalPagu = PROYEK.reduce((a, p) => a + p.pagu, 0);
+  const totalCair = PROYEK.reduce((a, p) => a + p.cair, 0);
+  const telat = PROYEK.filter(isTerlambat).length;
+  $("#summary").innerHTML = `
+    <div class="stat"><strong>${PROYEK.length}</strong><span>proyek demo</span></div>
+    <div class="stat"><strong>${rp(totalPagu)}</strong><span>total pagu</span></div>
+    <div class="stat"><strong>${rp(totalCair)}</strong><span>total dana cair</span></div>
+    <div class="stat alert"><strong>${telat} proyek</strong><span>terlambat / deviasi &gt; 10 poin</span></div>`;
+  $("#desaScores").innerHTML = DESA.map((d) => `
+    <div class="desa-card"><div><strong>Desa ${d.nama}</strong><span class="muted">, Kec. ${d.kecamatan}</span></div>
+    <div class="score">${d.skor.total}<small>/100</small></div>
+    <div class="muted small">Dokumen ${d.skor.dokumen} · Update ${d.skor.update} · Respons ${d.skor.respons}</div></div>`).join("");
+}
+
+function filtered() {
+  const q = ($("#q").value || "").toLowerCase();
+  const desa = $("#fDesa").value, status = $("#fStatus").value, kat = $("#fKategori").value;
+  return PROYEK.filter((p) => {
+    if (q && !p.nama.toLowerCase().includes(q)) return false;
+    if (desa && p.desaId !== Number(desa)) return false;
+    if (status === "terlambat" && !isTerlambat(p)) return false;
+    if (status && status !== "terlambat" && p.status !== status) return false;
+    if (kat && p.kategori !== kat) return false;
+    return true;
+  });
+}
+
+function renderList() {
+  const list = filtered();
+  $("#count").textContent = `${list.length} dari ${PROYEK.length} proyek`;
+  $("#list").innerHTML = list.length ? list.map((p) => {
+    const d = desaById(p.desaId), dev = deviasi(p), telat = isTerlambat(p);
+    return `<article class="card" onclick="openDetail(${p.id})">
+      <div class="card-top"><span class="badge ${telat ? "late" : p.status}">${telat ? "Terlambat" : labelStatus[p.status]}</span>
+      <span class="muted small">Desa ${d.nama} · ${labelKategori[p.kategori]}</span></div>
+      <h3>${p.nama}</h3>
+      <div class="bar"><div style="width:${p.fisik}%"></div></div>
+      <div class="row small"><span>Fisik <strong>${p.fisik}%</strong> · Rencana ${p.rencana}% · Deviasi <strong class="${dev < 0 ? "neg" : "pos"}">${dev > 0 ? "+" : ""}${dev} poin</strong></span></div>
+      <div class="row small muted"><span>Pagu ${rp(p.pagu)} · Cair ${rp(p.cair)}</span><span>${followed.has(p.id) ? "★ Diikuti" : ""}</span></div>
+    </article>`;
+  }).join("") : `<p class="muted">Tidak ada proyek yang cocok dengan filter. Coba hapus kata kunci atau filter.</p>`;
+}
+
+function curveSVG(p) {
+  const W = 560, H = 220, pad = 30;
+  const pt = (arr) => arr.map((v, i) => `${pad + i * (W - pad * 2) / 5},${H - pad - (v / 100) * (H - pad * 2)}`).join(" ");
+  const dots = (arr, cls) => arr.map((v, i) => `<circle class="${cls}" cx="${pad + i * (W - pad * 2) / 5}" cy="${H - pad - (v / 100) * (H - pad * 2)}" r="4"/>`).join("");
+  const labels = BULAN.map((b, i) => `<text x="${pad + i * (W - pad * 2) / 5}" y="${H - 8}" text-anchor="middle">${b}</text>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" class="curve" role="img" aria-label="Kurva rencana vs fisik">
+    <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H - pad}" /><line x1="${pad}" y1="${H - pad}" x2="${W - pad}" y2="${H - pad}" />
+    <polyline points="${pt(p.kurvaRencana)}" class="line-rencana" /><polyline points="${pt(p.kurvaFisik)}" class="line-fisik" />
+    ${dots(p.kurvaRencana, "dot-rencana")}${dots(p.kurvaFisik, "dot-fisik")}${labels}</svg>
+    <div class="legend"><span class="dashed">– – Rencana</span><span class="solid">— Fisik</span></div>`;
+}
+
+function openDetail(id) {
+  currentId = id;
+  const p = PROYEK.find((x) => x.id === id), d = desaById(p.desaId), telat = isTerlambat(p);
+  $("#listView").hidden = true; $("#detailView").hidden = false;
+  const sisa = p.pagu - p.cair;
+  $("#detail").innerHTML = `
+    <button class="link" onclick="backToList()">← Kembali ke daftar</button>
+    <div class="card-top"><span class="badge ${telat ? "late" : p.status}">${telat ? "Terlambat" : labelStatus[p.status]}</span>
+    <span class="muted">Desa ${d.nama}, Kec. ${d.kecamatan} · ${labelKategori[p.kategori]}</span></div>
+    <h2>${p.nama}</h2><p>${p.deskripsi}</p>
+    <button class="btn" onclick="toggleFollow(${p.id})">${followed.has(p.id) ? "★ Berhenti mengikuti" : "☆ Ikuti proyek ini"}</button>
+    <p class="muted small">${followed.has(p.id) ? "Kamu akan mendapat pembaruan milestone proyek ini (simulasi di prototipe)." : ""}</p>
+    <h3>Anggaran</h3>
+    <div class="money"><div><span>Pagu</span><strong>${rp(p.pagu)}</strong></div><div><span>Nilai kontrak</span><strong>${rp(p.kontrak)}</strong></div><div><span>Dana cair</span><strong>${rp(p.cair)}</strong></div><div><span>Sisa pagu</span><strong>${rp(sisa)}</strong></div></div>
+    <div class="bar big"><div style="width:${p.pagu ? Math.round(p.cair / p.pagu * 100) : 0}%"></div></div>
+    <p class="small muted">${p.pagu ? Math.round(p.cair / p.pagu * 100) : 0}% dari pagu sudah cair.</p>
+    <h3>Progres fisik vs rencana</h3>
+    <p>Fisik <strong>${p.fisik}%</strong> · Rencana <strong>${p.rencana}%</strong> · Deviasi <strong class="${deviasi(p) < 0 ? "neg" : "pos"}">${deviasi(p)} poin</strong> ${telat ? "— proyek ini ditandai terlambat." : ""}</p>
+    ${curveSVG(p)}
+    <h3>Timeline milestone</h3>
+    <ol class="timeline">${p.milestones.map((m) => `<li class="${m.status}"><strong>${m.judul}</strong>
+      <div class="small muted">Rencana: ${m.rencana} · Realisasi: ${m.realisasi || "—"} · ${labelMilestone[m.status]}</div>
+      ${m.catatan ? `<div class="small">${m.catatan}</div>` : ""}</li>`).join("")}</ol>
+    <h3>Dokumen (checklist kelengkapan)</h3>
+    <ul>${p.dokumen.map((x) => `<li>${x.tersedia ? "✓" : "○"} ${x.jenis} — ${x.tersedia ? "tersedia" : "belum tersedia"}</li>`).join("")}</ul>
+    <h3>Foto progres (placeholder demo)</h3>
+    <div class="photos"><div class="photo">Ilustrasi: kondisi awal</div><div class="photo">Ilustrasi: progres ${p.fisik}%</div><div class="photo">Ilustrasi: target selesai</div></div>
+    <p class="small muted">Di produksi, foto diunggah operator dengan geotag dan stempel waktu, bukan placeholder.</p>
+    <h3>Laporan warga pada proyek ini</h3>
+    <div id="laporanList">${p.laporan.length ? p.laporan.map((l) => `<div class="laporan"><strong>${l.nama}</strong> <span class="muted small">· ${l.milestone} · ${l.status}</span><p>${l.isi}</p>${l.tanggapan ? `<p class="small"><em>Tanggapan:</em> ${l.tanggapan}</p>` : ""}</div>`).join("") : `<p class="muted small">Belum ada laporan.</p>`}</div>
+    <form id="laporanForm" class="form">
+      <label>Milestone terkait<select id="lapMilestone">${p.milestones.map((m) => `<option>${m.judul}</option>`).join("")}</select></label>
+      <label>Nama pelapor<input id="lapNama" required placeholder="cth: Warga RT 02"></label>
+      <label>Kendala yang ditemukan<textarea id="lapIsi" required placeholder="Tulis kendala yang kamu lihat di lapangan"></textarea></label>
+      <button class="btn" type="submit">Kirim laporan</button>
+      <p class="small muted">Laporan masuk dengan status "Diterima" dan tidak langsung mengubah status proyek. Verifikasi dilakukan operator desa.</p>
+    </form>`;
+  $("#laporanForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    p.laporan.unshift({ nama: $("#lapNama").value.trim(), isi: $("#lapIsi").value.trim(), milestone: $("#lapMilestone").value, status: "diterima", tanggapan: "" });
+    openDetail(id);
+    alert("Laporan terkirim dan berstatus Diterima. Terima kasih — laporanmu sudah tercatat pada proyek ini.");
+  });
+  window.scrollTo({ top: 0 });
+}
+
+function backToList() { $("#detailView").hidden = true; $("#listView").hidden = false; renderList(); }
+function toggleFollow(id) { followed.has(id) ? followed.delete(id) : followed.add(id); saveFollow(); openDetail(id); renderList(); }
+
+function init() {
+  $("#fDesa").innerHTML = `<option value="">Semua desa</option>` + DESA.map((d) => `<option value="${d.id}">Desa ${d.nama}</option>`).join("");
+  ["q", "fDesa", "fStatus", "fKategori"].forEach((id) => document.getElementById(id).addEventListener("input", renderList));
+  renderSummary(); renderList();
+}
+init();
+
+</script>
+</body>
+</html>
